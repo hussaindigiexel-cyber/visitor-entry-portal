@@ -1,39 +1,168 @@
-<form id="visitorForm">
-<table border="1" cellpadding="10" width="100%">
-<tr>
-<th>Name</th>
-<th>Date</th>
-<th>In Timing</th>
-<th>Out Timing</th>
-</tr>
-<tr>
-<td><input type="text" name="name" required></td>
-<td><input type="date" name="date" required></td>
-<td><input type="time" name="in_time" required></td>
-<td><input type="time" name="out_time" required></td>
-</tr>
-</table>
-<br>
-<button type="submit">Submit</button>
-</form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOS Youth Home Khairpur - Visitor Entry</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            background-color: #f9f9f9;
+            /* Flexbox makes centering everything super easy */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+        }
+        
+        h1, h2 {
+            text-align: center;
+            margin: 10px 0;
+            color: #333;
+        }
+        
+        h2 {
+            font-weight: normal;
+            color: #555;
+            margin-bottom: 30px;
+        }
 
+        .form-container { 
+            width: 100%;
+            max-width: 400px; 
+            padding: 25px; 
+            background-color: white;
+            border: 1px solid #ccc; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: left; /* Keeps the form labels easy to read */
+        }
+
+        .form-group { 
+            margin-bottom: 15px; 
+        }
+
+        label { 
+            display: block; 
+            margin-bottom: 5px; 
+            font-weight: bold; 
+            color: #333;
+        }
+
+        input[type="text"], input[type="date"], input[type="time"], input[type="number"] {
+            width: 100%; 
+            padding: 10px; 
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        input[readonly] {
+            background-color: #e9ecef;
+            cursor: not-allowed;
+            text-align: center; /* Centers the S.No number itself */
+            font-weight: bold;
+        }
+
+        .button-group { 
+            display: flex; 
+            gap: 10px; 
+            margin-top: 25px;
+        }
+
+        button { 
+            padding: 12px 15px; 
+            cursor: pointer; 
+            border-radius: 4px;
+            font-weight: bold;
+            flex: 1;
+            font-size: 16px;
+        }
+
+        .btn-submit { background-color: #0056b3; color: white; border: none; }
+        .btn-submit:hover { background-color: #004494; }
+        .btn-clear { background-color: #dc3545; color: white; border: none; }
+        .btn-clear:hover { background-color: #c82333; }
+    </style>
+</head>
+<body>
+
+    <h1>SOS Youth Home Khairpur</h1>
+    <h2>Visitors Entry Log</h2>
+
+    <div class="form-container">
+        <form id="visitorForm">
+            
+            <div class="form-group">
+                <label for="sno">S.No:</label>
+                <input type="number" id="sno" name="sno" value="1" readonly>
+            </div>
+            
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" placeholder="Enter visitor's full name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="date">Date:</label>
+                <input type="date" id="date" name="date" required>
+            </div>
+
+            <div class="form-group">
+                <label for="in_time">In Time:</label>
+                <input type="time" id="in_time" name="in_time" required>
+            </div>
+
+            <div class="form-group">
+                <label for="out_time">Out Time:</label>
+                <input type="time" id="out_time" name="out_time">
+            </div>
+
+            <div class="button-group">
+                <button type="button" class="btn-submit" onclick="submitEntry()">Submit</button>
+                <button type="reset" class="btn-clear">Clear</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('date').valueAsDate = new Date();
+        let currentSno = 1;
+
+        function submitEntry() {
+            const name = document.getElementById('name').value;
+            if(!name) {
+                alert("Please enter the visitor's name.");
+                return;
+            }
+
+            alert("Visitor logged successfully!");
+            
+            currentSno++;
+            
+            document.getElementById('visitorForm').reset();
+            document.getElementById('sno').value = currentSno;
+            document.getElementById('date').valueAsDate = new Date();
+        }
+
+        document.getElementById('visitorForm').addEventListener('reset', function(e) {
+            setTimeout(() => {
+                document.getElementById('sno').value = currentSno;
+                document.getElementById('date').valueAsDate = new Date();
+            }, 10);
+        });
+    </script>
 <script>
 const form = document.getElementById('visitorForm');
 form.addEventListener('submit', e => {
   e.preventDefault();
   const data = new FormData(form);
-
-  fetch('https://script.google.com/macros/s/AKfycbwofYkVOQGjt7TC-B1t8sjE8sSLu-e59kH4-wNQBx3X7COk9M_t4fB4yiupHD9rNG_LNA/exec', {
-    method: 'POST',
-    body: data
-  })
-  .then(response => response.text())
-  .then(data => {
-    alert("Record Saved Successfully!");
-    form.reset();
-  })
-  .catch(error => {
-    alert("Error Saving Record");
-  });
+  fetch('https://script.google.com/macros/s/AKfycbySS8ZeBMRRLePM0I_mUQDgwqVE-6aMBLYLbQv6i5N5y7bC5SajqSjHPzt8UJUqbZ8a/exec', {method: 'POST', body: data})
+    .then(res => res.text())
+    .then(res => alert('Record saved successfully!'))
+    .catch(err => alert('Error saving record'));
 });
 </script>
+
+</body>
+</html>
